@@ -2,6 +2,60 @@
   padding: 0 2rem;
 }
 
+.spinner {
+  height: 100vh;
+  opacity: 1;
+  position: relative;
+  transition: opacity linear 0.1s;    
+}
+
+.spinner::before{
+  animation: 500ms linear infinite spinner;
+  border: solid 3px #eee;
+  border-bottom-color: #EF6565;
+  border-radius: 50%;
+  content: "";
+  height: 40px;
+  left: 50%;
+  opacity: inherit;
+  position: absolute;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  transform-origin: center;
+  width: 40px;
+  will-change: transform;
+}
+
+@keyframes spinner {
+  0% {
+      transform: translate3d(-50%, -50%, 0) rotate(0deg);
+  }
+  100% {
+       transform: translate3d(-50%, -50%, 0) rotate(360deg);
+  }
+}
+
+.peopleContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.searchInput {
+  padding: 8px;
+  border-radius: 8px;
+  border-color: #eee;
+  margin-bottom: 12px;
+}
+
+.personCard {
+  height: 100px;
+}
+
+.personName {
+  font-weight: 700;
+}
+
 .main {
   min-height: 100vh;
   padding: 4rem 0;
