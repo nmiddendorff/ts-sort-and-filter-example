@@ -33,8 +33,22 @@ export const sortAndFilter = (
     });
   }
 
+  const fields = ["first_name", "last_name", "email"];
+
+  const checkForAnyToBeTrue = (user: person) => {
+    for (let i = 0; i < fields.length; i++) {
+      if (
+        user[fields[i] as keyof person].toLowerCase().indexOf(lowerCaseInput) >
+        -1
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const foundItems = dataSorted.filter(function (user) {
-    return user.first_name.toLowerCase().indexOf(lowerCaseInput) > -1;
+    return checkForAnyToBeTrue(user);
   });
 
   return foundItems;

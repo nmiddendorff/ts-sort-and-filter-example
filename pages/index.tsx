@@ -86,6 +86,7 @@ const Home: NextPage = () => {
                 />
                 <div className={styles.cardInfoBlock}>
                   <div className={styles.personName}>{item.first_name}</div>
+                  <div className={styles.personName}>{item.last_name}</div>
                   <div className={styles.email}>{item.email}</div>
                 </div>
               </div>
