@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import { sortAndFilter } from "../helpers/sortAndFilter";
 import { person } from "../models/person";
+import Image from "next/image";
 
 const Spinner = () => <span className={styles.spinner}></span>;
 
@@ -16,10 +17,10 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     setLoadingState(true);
-    fetch("https://jsonplaceholder.typicode.com/users")
+    fetch("https://reqres.in/api/users?page=2")
       .then((res) => res.json())
-      .then((data) => {
-        setData(data);
+      .then((response) => {
+        setData(response.data);
         setLoadingState(false);
       });
   }, []);
@@ -75,8 +76,18 @@ const Home: NextPage = () => {
           {filteredData.map((item) => {
             return (
               <div className={styles.personCard} key={item.id}>
-                <div className={styles.personName}>{item.name}</div>
-                <div className={styles.email}>{item.email}</div>
+                <Image
+                  className={styles.imageContainer}
+                  layout="fixed"
+                  height="50"
+                  width="50"
+                  src={item.avatar}
+                  alt={item.first_name}
+                />
+                <div className={styles.cardInfoBlock}>
+                  <div className={styles.personName}>{item.first_name}</div>
+                  <div className={styles.email}>{item.email}</div>
+                </div>
               </div>
             );
           })}

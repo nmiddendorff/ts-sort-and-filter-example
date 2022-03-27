@@ -1,5 +1,6 @@
 export interface person {
-  name: string;
+  first_name: string;
   id: string;
   email: string;
+  avatar: string;
 }

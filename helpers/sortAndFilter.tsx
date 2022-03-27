@@ -15,17 +15,17 @@ export const sortAndFilter = (
   } else {
     dataSorted = dataSorted.sort(function (a, b) {
       if (sortOption === "AZ") {
-        if (a.name < b.name) {
+        if (a.first_name < b.first_name) {
           return -1;
         }
-        if (a.name > b.name) {
+        if (a.first_name > b.first_name) {
           return 1;
         }
       } else if (sortOption === "ZA") {
-        if (a.name < b.name) {
+        if (a.first_name < b.first_name) {
           return 1;
         }
-        if (a.name > b.name) {
+        if (a.first_name > b.first_name) {
           return -1;
         }
       }
@@ -34,7 +34,7 @@ export const sortAndFilter = (
   }
 
   const foundItems = dataSorted.filter(function (user) {
-    return user.name.toLowerCase().indexOf(lowerCaseInput) > -1;
+    return user.first_name.toLowerCase().indexOf(lowerCaseInput) > -1;
   });
 
   return foundItems;
