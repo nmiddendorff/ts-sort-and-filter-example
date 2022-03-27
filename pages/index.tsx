@@ -5,8 +5,7 @@ import styles from "../styles/Home.module.css";
 import { sortAndFilter } from "../helpers/sortAndFilter";
 import { person } from "../models/person";
 import Image from "next/image";
-
-const Spinner = () => <span className={styles.spinner}></span>;
+import { Spinner } from "../components/Spinner";
 
 const Home: NextPage = () => {
   const [data, setData] = useState<person[]>([]);
@@ -26,7 +25,6 @@ const Home: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log(searchInput);
     setFilteredData(sortAndFilter(searchInput, resultsDirection, data));
   }, [searchInput, resultsDirection, data]);
 
@@ -56,6 +54,7 @@ const Home: NextPage = () => {
         {loadingState ? <Spinner /> : null}
         <div className={styles.peopleContainer}>
           <input
+            data-testid="searchInput"
             className={styles.searchInput}
             value={searchInput}
             onChange={inputHandler}
@@ -81,6 +80,7 @@ const Home: NextPage = () => {
                   layout="fixed"
                   height="50"
                   width="50"
+                  data-testid="avatar"
                   src={item.avatar}
                   alt={item.first_name}
                 />
@@ -92,7 +92,7 @@ const Home: NextPage = () => {
             );
           })}
         </div>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <pre data-testid="rawJson">{JSON.stringify(data, null, 2)}</pre>
       </main>
     </div>
   );
