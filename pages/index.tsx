@@ -1,20 +1,13 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
+import { sortAndFilter } from '../helpers/sortAndFilter'
+import { person } from '../models/person'
 
 const Spinner = () => 
   <span className={styles.spinner}></span>
-
-
-  // https://jsonplaceholder.typicode.com/users
-
-interface person {
-  name: string
-  id: string
-  email: string
-}
 
 const Home: NextPage = () => {
   const [data, setData] = useState<person[]>([]);
@@ -29,53 +22,25 @@ const Home: NextPage = () => {
       .then((res) => res.json())
       .then((data) => {
         setData(data)
-        setFilteredData(data)
         setLoadingState(false)
       })
   }, [])
 
-
-  const sortAndFilter = (enteredName: string, sortOption: string) => {
-    const lowerCaseInput = enteredName.toLowerCase();
-
-    let dataSorted = [...data];
-
-    if (sortOption === 'Default'){
-      console.log(data)
-      dataSorted = data;
-    } else {
-      dataSorted = dataSorted.sort(function(a, b){
-        if(sortOption === 'AZ'){
-          if(a.name < b.name) { return -1; }
-          if(a.name > b.name) { return 1; }
-        } else if(sortOption === 'ZA'){
-          if(a.name < b.name) { return 1; }
-          if(a.name > b.name) { return -1; }
-        }
-        return 0;
-      })
-    }
-
-    const foundItems = dataSorted.filter(function(user) {
-
-      return user.name.toLowerCase().indexOf(lowerCaseInput) > -1; 
-    });
-
-    setFilteredData(foundItems);
-  }
+  useEffect(() => {
+    console.log(searchInput)
+    setFilteredData(sortAndFilter(searchInput, resultsDirection, data))
+  }, [searchInput, resultsDirection, data])
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const enteredName = event.target.value;
 
     setsearchInput(enteredName);
-    sortAndFilter(enteredName, resultsDirection);
   };
 
   const selectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const sortOption = event.target.value;
 
     setResultsDirection(sortOption);
-    sortAndFilter(searchInput, sortOption);
   };
 
   const sortOptions: string[] = ['Default', 'AZ', 'ZA'];
