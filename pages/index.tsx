@@ -1,35 +1,33 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
-import styles from '../styles/Home.module.css'
-import { sortAndFilter } from '../helpers/sortAndFilter'
-import { person } from '../models/person'
+import type { NextPage } from "next";
+import Head from "next/head";
+import { useEffect, useState } from "react";
+import styles from "../styles/Home.module.css";
+import { sortAndFilter } from "../helpers/sortAndFilter";
+import { person } from "../models/person";
 
-const Spinner = () => 
-  <span className={styles.spinner}></span>
+const Spinner = () => <span className={styles.spinner}></span>;
 
 const Home: NextPage = () => {
   const [data, setData] = useState<person[]>([]);
   const [filteredData, setFilteredData] = useState<person[]>([]);
   const [loadingState, setLoadingState] = useState(false);
-  const [searchInput, setsearchInput] = useState('');
-  const [resultsDirection, setResultsDirection] = useState('Default');
+  const [searchInput, setsearchInput] = useState("");
+  const [resultsDirection, setResultsDirection] = useState("Default");
 
   useEffect(() => {
-    setLoadingState(true)
-    fetch('https://jsonplaceholder.typicode.com/users')
+    setLoadingState(true);
+    fetch("https://jsonplaceholder.typicode.com/users")
       .then((res) => res.json())
       .then((data) => {
-        setData(data)
-        setLoadingState(false)
-      })
-  }, [])
+        setData(data);
+        setLoadingState(false);
+      });
+  }, []);
 
   useEffect(() => {
-    console.log(searchInput)
-    setFilteredData(sortAndFilter(searchInput, resultsDirection, data))
-  }, [searchInput, resultsDirection, data])
+    console.log(searchInput);
+    setFilteredData(sortAndFilter(searchInput, resultsDirection, data));
+  }, [searchInput, resultsDirection, data]);
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const enteredName = event.target.value;
@@ -43,7 +41,7 @@ const Home: NextPage = () => {
     setResultsDirection(sortOption);
   };
 
-  const sortOptions: string[] = ['Default', 'AZ', 'ZA'];
+  const sortOptions: string[] = ["Default", "AZ", "ZA"];
 
   return (
     <div className={styles.container}>
@@ -54,30 +52,39 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-      {
-        loadingState ? <Spinner /> : null
-      }
-      <div className={styles.peopleContainer}>
-        <input className={styles.searchInput} value={searchInput} onChange={inputHandler} />
-        <select onChange={selectHandler} name="cars" defaultValue={resultsDirection} >
-          {sortOptions.map((option) => { 
-              return (<option key={option} value={option}>{option}</option>);
+        {loadingState ? <Spinner /> : null}
+        <div className={styles.peopleContainer}>
+          <input
+            className={styles.searchInput}
+            value={searchInput}
+            onChange={inputHandler}
+          />
+          <select
+            onChange={selectHandler}
+            name="cars"
+            defaultValue={resultsDirection}
+          >
+            {sortOptions.map((option) => {
+              return (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              );
+            })}
+          </select>
+          {filteredData.map((item) => {
+            return (
+              <div className={styles.personCard} key={item.id}>
+                <div className={styles.personName}>{item.name}</div>
+                <div className={styles.email}>{item.email}</div>
+              </div>
+            );
           })}
-        </select>
-        { 
-          filteredData.map((item) => {
-            return <div className={styles.personCard} key={item.id}>
-              <div className={styles.personName}>{item.name}</div>
-              <div className={styles.email}>{item.email}</div>
-            </div>
-          })
-        }  
-      </div>
-      <pre>{JSON.stringify(data,  null, 2)}</pre>
+        </div>
+        <pre>{JSON.stringify(data, null, 2)}</pre>
       </main>
-
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
